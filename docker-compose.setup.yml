@@ -8,7 +8,7 @@ volumes:
 services:
   setup:
     # build: .
-    image: garyritchie/docker-adaptauthoring:0.2.2
+    image: mattwilmott/adaptauthoring:0.6.0
     container_name: adaptauthoring
     # extends:
     #   file: docker-compose.yml
@@ -19,8 +19,10 @@ services:
       - adaptdata:/adapt_authoring
     external_links:
       - adaptdb
-    command: node install --install Y --serverPort 5000 --serverName localhost --dbHost adaptdb --dbName adapt-tenant-master --dbPort 27017 --dataRoot data --sessionSecret your-session-secret --useffmpeg Y --smtpService dummy --smtpUsername smtpUser --smtpPassword smtpPass --fromAddress you@example.com --name master --displayName Master --email ${ADMIN_EMAIL} --password ${ADMIN_PASSWORD} # && node upgrade --Y/n Y
+    command: node install --install Y --serverPort 5000 --serverName localhost --dbHost adaptdb --dbName adapt-tenant-master --dbUser '' --dbPass '' --dbType mongo --dbPort 27017 --root /adapt-authoring --dataRoot data --sessionSecret your-session-secret --useffmpeg Y --useSmtp false --smtpService dummy --smtpUsername smtpUser --smtpPassword smtpPass --fromAddress you@example.com --name master --displayName Master --email admin@example.com --password password --authoringToolRepository https://github.com/adaptlearning/adapt_authoring.git --frameworkRepository https://github.com/adaptlearning/adapt_framework.git --frameworkRevision 'tags/v3.3.0' --auth local --masterTenantName Master --masterTenantID 01
   upgrade:
     extends:
       service: setup
     command: node upgrade --Y/n Y
+
+    #--email ${ADMIN_EMAIL:-admin@example.com} --password ${ADMIN_PASSWORD:-password}
